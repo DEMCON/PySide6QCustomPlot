@@ -1,0 +1,40 @@
+
+[project]
+name = "pyside6qcustomplot"
+readme = "README.md"
+authors = [{ "name" = "Windel Bouwman", "email" = "windel@windel.nl" }]
+
+requires-python = ">=3.8"
+dependencies = ["PySide6~=6.3.2"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+]
+
+dynamic = ["version", "description"]
+
+[build-system]
+requires = ["py-build-cmake~=0.0.14"]
+# It would be nice to install those, but they are downloaded from the qt.io mirror:
+# "shiboken6~=6.3.2", "pyside6~=6.3.2", "shiboken6_generator~=6.3.2"
+build-backend = "py_build_cmake.build"
+
+[tool.py-build-cmake.module]
+directory = "src-python"
+
+[tool.py-build-cmake.sdist]
+include = ["CMakeLists.txt", "src/*"]
+
+[tool.py-build-cmake.cmake]
+minimum_version = "3.18"
+build_type = "Release"
+generator = "Ninja"
+source_path = "."
+build_args = ["-j", "7"]
+

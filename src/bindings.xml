@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+
+<typesystem package="PySide6QCustomPlot">
+    <load-typesystem name="typesystem_widgets.xml" generate="no"/>
+    <load-typesystem name="typesystem_gui.xml" generate="no"/>
+    <load-typesystem name="typesystem_printsupport.xml" generate="no"/>
+
+    <namespace-type name="QCP">
+        <enum-type name="ResolutionUnit" />
+        <enum-type name="ExportPen" />
+        <enum-type name="SignDomain" />
+        <enum-type name="MarginSide" flags="MarginSides" />
+        <enum-type name="AntialiasedElement" flags="AntialiasedElements" />
+        <enum-type name="PlottingHint" />
+        <enum-type name="Interaction" flags="Interactions" />
+        <enum-type name="SelectionRectMode" />
+        <enum-type name="SelectionType" />
+    </namespace-type>
+
+    <!--
+        To prevent circular dependencies, remove all fields which
+            start with m
+        from
+            all classes starting with QCP
+        
+        We should not access the protected / private fields anyway from python land...
+    -->
+    <rejection class="^QCP.*$" field-name="^m.*$" />
+    <rejection class="QCustomPlot" field-name="^m.*$" />
+
+    <!-- Remove selectEvent, deselectEvent and selectTest functions. -->
+    <rejection class="^QCP.*$" function-name="selectEvent" />
+    <rejection class="^QCP.*$" function-name="deselectEvent" />
+    <rejection class="^QCP.*$" function-name="selectTest" />
+
+    <!-- This function contains badly generated code... -->
+    <rejection class="QCustomPlot" function-name="interactions" />
+
+    <!-- Strip off non-cooperating function dealing with plottables ... -->
+    <rejection class="QCustomPlot" function-name="^.*[pP]lottable.*$" />
+    <rejection class="^QCP.*$" function-name="^.*[pP]lottable.*$" />
+
+    <object-type name="QCustomPlot">
+        <enum-type name="LayerInsertMode" />
+        <enum-type name="RefreshPriority" />
+    </object-type>
+
+    <object-type name="QCPPainter">
+        <enum-type name="PainterMode" />
+    </object-type>
+
+    <rejection class="QCPGraph" function-name="interface1D" />
+    <rejection class="QCPGraph" function-name="selectTestRect" />
+
+    <object-type name="QCPGraph">
+        <enum-type name="LineStyle" />
+    </object-type>
+
+    <!--
+        QCPAbstractPlottable1D
+        Set generate to 'no' since this is class is a template class.
+        It also has two base classes: QCPAbstractPlottable and QCPPlottableInterface1D.
+    -->
+    <object-type name="QCPAbstractPlottable1D" generate="no" />
+
+    <!-- QCPPlottableInterface1D: it's fine as object type, is an interface type. -->
+    <object-type name="QCPPlottableInterface1D" />
+
+    <!--
+        QCPAbstractPlottable
+        An abstract class, subclassed by QCPAbstractPlottable1D.
+        Take great care not to reference this class, so all things
+        referring to plottables are removed.
+    -->
+    <object-type name="QCPAbstractPlottable" force-abstract="yes" />
+
+    <object-type name="QCPGraphData" />
+
+    <object-type name="QCPAxis">
+        <enum-type name="AxisType" />
+        <enum-type name="LabelSide" />
+        <enum-type name="ScaleType" />
+        <enum-type name="SelectablePart" />
+    </object-type>
+
+    <object-type name="QCPAxisTicker">
+        <enum-type name="TickStepStrategy" />
+    </object-type>
+
+    <object-type name="QCPLayerable" />
+
+    <object-type name="QCPLayout" />
+
+    <object-type name="QCPLayer">
+        <enum-type name="LayerMode" />
+    </object-type>
+
+    <object-type name="QCPLayoutElement">
+        <enum-type name="UpdatePhase" />
+        <enum-type name="SizeConstraintRect" />
+    </object-type>
+
+    <object-type name="QCPLayoutGrid">
+        <enum-type name="FillOrder" />
+    </object-type>
+
+    <object-type name="QCPAxisRect" />
+
+    <object-type name="QCPLegend">
+        <enum-type name="SelectablePart" />
+    </object-type>
+
+    <value-type name="QCPRange" />
+    <value-type name="QCPDataSelection" default-constructor="QCPDataSelection()" />
+
+    <object-type name="QCPGrid" />
+
+    <object-type name="QCPLineEnding">
+        <enum-type name="EndingStyle" />
+    </object-type>
+
+    <object-type name="QCPScatterStyle">
+        <enum-type name="ScatterShape" />
+        <enum-type name="ScatterProperty" />
+    </object-type>
+
+</typesystem>
