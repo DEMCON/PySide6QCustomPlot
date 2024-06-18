@@ -20,9 +20,12 @@ classifiers = [
 dynamic = ["version", "description"]
 
 [build-system]
-requires = ["py-build-cmake~=0.0.14"]
-# It would be nice to install those, but they are downloaded from the qt.io mirror:
-# "shiboken6~=6.3.2", "pyside6~=6.3.2", "shiboken6_generator~=6.3.2"
+requires = [
+    "py-build-cmake", 
+    "shiboken6",
+    "pyside6",
+    "shiboken6-generator"
+]
 build-backend = "py_build_cmake.build"
 
 [tool.py-build-cmake.module]

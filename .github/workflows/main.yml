@@ -33,7 +33,7 @@ jobs:
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
       - name: Install wheel build tools
-        run: pip install build py-build-cmake
+        run: pip install build py-build-cmake ninja pyside6 shiboken6 shiboken6-generator
       - name: Build wheels
         run: python -m build --no-isolation --wheel
       #   uses: pypa/cibuildwheel@v2.19.1
