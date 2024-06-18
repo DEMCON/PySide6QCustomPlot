@@ -22,12 +22,13 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
       - run: pip install aqtinstall
-      # - name: Install Qt
-      #   uses: jurplel/install-qt-action@v4
-      #   with:
-      #     version: '6.7.1'
-      #     cache: 'true'
-      #     extra: '--base http://mirrors.ocf.berkeley.edu/qt/'
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.7.1'
+          cache: 'true'
+          setup-python: false
+          extra: '--base http://mirrors.ocf.berkeley.edu/qt/'
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
       # - name: Build wheels
