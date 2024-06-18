@@ -21,7 +21,8 @@ jobs:
         with:
           python-version: '3.10'
           cache: 'pip'
-      - run: pip install aqtinstall
+      - name: Install aqtinstall
+        run: pip install aqtinstall
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
@@ -31,6 +32,8 @@ jobs:
           extra: '--base http://mirrors.ocf.berkeley.edu/qt/'
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
-      - run: pip install build py-build-cmake
-      # - name: Build wheels
+      - name: Install wheel build tools
+        run: pip install build py-build-cmake
+      - name: Build wheels
+        run: python -m build --no-isolation --wheel
       #   uses: pypa/cibuildwheel@v2.19.1
