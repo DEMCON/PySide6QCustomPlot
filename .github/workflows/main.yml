@@ -31,5 +31,6 @@ jobs:
           extra: '--base http://mirrors.ocf.berkeley.edu/qt/'
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Build wheels
-        uses: pypa/cibuildwheel@v2.19.1
+      - run: pip install build py-build-cmake
+      # - name: Build wheels
+      #   uses: pypa/cibuildwheel@v2.19.1
