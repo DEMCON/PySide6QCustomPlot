@@ -2,24 +2,34 @@
 project(my_wrapper)
 cmake_minimum_required(VERSION 3.18)
 
-# Main tuning variables:
-set(MY_SITE_PACKAGES_PATH "${CMAKE_CURRENT_SOURCE_DIR}/.venv/Lib/site-packages")
-set(MY_PYTHON_INSTALL_PATH "C:/Python38")
-set(MY_QT_INSTALL C:/Qt6/6.3.2/msvc2019_64)
-
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_PREFIX_PATH C:/Qt6/6.3.2/msvc2019_64)
-set(CMAKE_BUILD_TYPE Release)
+
+# Find Python
+find_package (Python3 COMPONENTS Interpreter Development)
+if(NOT Python3_Interpreter_FOUND)
+    message(FATAL_ERROR "Python3 not found")
+endif()
+message(STATUS "Using python: ${Python3_EXECUTABLE}")
 
 message(STATUS "Python3_ROOT_DIR: ${Python3_ROOT_DIR}")
 message(STATUS "Python3_EXECUTABLE: ${Python3_EXECUTABLE}")
+message(STATUS "Python3_INCLUDE_DIRS: ${Python3_INCLUDE_DIRS}")
+message(STATUS "Python3_LIBRARY_DIRS: ${Python3_LIBRARY_DIRS}")
+message(STATUS "Python3_SITELIB: ${Python3_SITELIB}")
 message(STATUS "Python3_FIND_REGISTRY: ${Python3_FIND_REGISTRY}")
 message(STATUS "PY_BUILD_CMAKE_MODULE_NAME: ${PY_BUILD_CMAKE_MODULE_NAME}")
 
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets PrintSupport)
 
 qt_standard_project_setup()
+
+set(QT_INCLUDES "")
+get_property(QT_CORE_INCLUDE_DIRS TARGET Qt6::Core PROPERTY INTERFACE_INCLUDE_DIRECTORIES)
+foreach(INCLUDE_DIR ${QT_CORE_INCLUDE_DIRS})
+    list(APPEND QT_INCLUDES "-I${INCLUDE_DIR}")
+endforeach()
+message(STATUS "QT_INCLUDES = ${QT_INCLUDES}")
 
 set(SHIBOKEN_OUTPUT_FOLDER "${CMAKE_CURRENT_BINARY_DIR}/OUTPUTDIR")
 
@@ -75,8 +85,8 @@ add_custom_command(
     COMMAND shiboken6 
         --generator-set=shiboken
         --output-directory=OUTPUTDIR
-        -I${MY_QT_INSTALL}/include -I${MY_QT_INSTALL}/include/QtCore
-        --typesystem-paths=${MY_SITE_PACKAGES_PATH}/PySide6/typesystems
+        ${QT_INCLUDES}
+        --typesystem-paths=${Python3_SITELIB}/PySide6/typesystems
         --enable-pyside-extensions
         --avoid-protected-hack
         ${CMAKE_CURRENT_SOURCE_DIR}/src/wrapper.hpp
@@ -103,13 +113,13 @@ target_include_directories(
     PySide6QCustomPlot
     PRIVATE
     "src"
-    "${MY_PYTHON_INSTALL_PATH}/include"
-    "${MY_SITE_PACKAGES_PATH}/PySide6/include"
-    "${MY_SITE_PACKAGES_PATH}/PySide6/include/QtWidgets"
-    "${MY_SITE_PACKAGES_PATH}/PySide6/include/QtGui"
-    "${MY_SITE_PACKAGES_PATH}/PySide6/include/QtCore"
-    "${MY_SITE_PACKAGES_PATH}/PySide6/include/QtPrintSupport"
-    "${MY_SITE_PACKAGES_PATH}/shiboken6_generator/include"
+    "${Python3_INCLUDE_DIRS}"
+    "${Python3_SITELIB}/PySide6/include"
+    "${Python3_SITELIB}/PySide6/include/QtWidgets"
+    "${Python3_SITELIB}/PySide6/include/QtGui"
+    "${Python3_SITELIB}/PySide6/include/QtCore"
+    "${Python3_SITELIB}/PySide6/include/QtPrintSupport"
+    "${Python3_SITELIB}/shiboken6_generator/include"
 )
 
 # Use the python stable ABI3:
@@ -129,9 +139,9 @@ set_target_properties(
 target_link_directories(
     PySide6QCustomPlot
     PRIVATE
-    "${MY_PYTHON_INSTALL_PATH}/libs"
-    ${MY_SITE_PACKAGES_PATH}/shiboken6
-    ${MY_SITE_PACKAGES_PATH}/PySide6
+    ${Python3_LIBRARY_DIRS}
+    ${Python3_SITELIB}/shiboken6
+    ${Python3_SITELIB}/PySide6
 )
 
 target_link_libraries(
