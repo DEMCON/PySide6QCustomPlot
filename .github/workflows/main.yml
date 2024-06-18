@@ -19,7 +19,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.7.2'
+          version: '6.7.1'
           cache: 'true'
           extra: '--base http://mirrors.ocf.berkeley.edu/qt/'
       - name: Setup MSVC
