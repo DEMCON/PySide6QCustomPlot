@@ -16,12 +16,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
+      - name: Install python
+        uses: actions/setup-python@v5
         with:
-          version: '6.7.1'
-          cache: 'true'
-          extra: '--base http://mirrors.ocf.berkeley.edu/qt/'
+          python-version: '3.11'
+          cache: 'pip'
+      - run: pip install aqtinstall
+      # - name: Install Qt
+      #   uses: jurplel/install-qt-action@v4
+      #   with:
+      #     version: '6.7.1'
+      #     cache: 'true'
+      #     extra: '--base http://mirrors.ocf.berkeley.edu/qt/'
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
       # - name: Build wheels
