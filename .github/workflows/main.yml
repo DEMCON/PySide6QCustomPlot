@@ -19,9 +19,10 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          cache: true
           version: '6.7.2'
+          cache: 'true'
+          extra: '--base http://mirrors.ocf.berkeley.edu/qt/'
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
-      - name: Build wheels
-        uses: pypa/cibuildwheel@v2.19.1
+      # - name: Build wheels
+      #   uses: pypa/cibuildwheel@v2.19.1
