@@ -20,7 +20,7 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           cache: true
-          version: '6.4.1'
+          version: '6.7.2'
       - name: Setup MSVC
         uses: ilammy/msvc-dev-cmd@v1
       - name: Build wheels
